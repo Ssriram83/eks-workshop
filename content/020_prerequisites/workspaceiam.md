@@ -117,6 +117,6 @@ Download the Access Key and Secret key and set it as environment variables.
 ![Image](/images/IAM_USER_ACCESS-KEY.PNG)
 
 ```
-export S3_AWS_SECRET_ACCESS_KEY=Github_user_name
-export GITHUB_TOKEN=<Your-access-token>
+export S3_AWS_ACCESS_KEY_ID=YOUR_ACCESS_KEY
+export S3_AWS_SECRET_ACCESS_KEY=YOUR_SECRET_ID
 ```
