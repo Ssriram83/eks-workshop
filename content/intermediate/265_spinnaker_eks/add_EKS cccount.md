@@ -102,45 +102,4 @@ Created kubeconfig file at /home/ec2-user/Kubeconfig-ws-sa
 {{< /output >}}
 
 
-#### Configure EKS Account
-
-
-Open the `SpinnakerService` manifest located under `deploy/spinnaker/basic/spinnakerservice.yml`, then add the below to the section `spec.spinnakerConfig.config`.
-
-  {{< output >}}
-        providers:
-            dockerRegistry:
-              enabled: true
-            kubernetes:
-              enabled: true
-              accounts:
-              - name: spinnaker-workshop
-                requiredGroupMembership: []
-                providerVersion: V2
-                permissions:
-                dockerRegistries:
-                  - accountName: my-ecr-registry
-                configureImagePullSecrets: true
-                cacheThreads: 1
-                namespaces: [spinnaker,detail]
-                omitNamespaces: []
-                kinds: []
-                omitKinds: []
-                customResources: []
-                cachingPolicies: []
-                oAuthScopes: []
-                onlySpinnakerManaged: false
-                kubeconfigFile: kubeconfig-sp  # File name must match "files" key
-              primaryAccount: spinnaker-workshop  # Change to a desired account from the accounts array
-   {{< /output >}}
-
-
-Open the `SpinnakerService` manifest located under `deploy/spinnaker/basic/spinnakerservice.yml`, then add the below section under `spec.spinnakerConfig`. Replace the `<FILE CONTENTS HERE>` in below section with kubeconfig file content created from [previous step](/265_spinnaker_eks/add_eks-cccount/#create-the-service-account) from the location ${HOME}/Kubeconfig-ws-sa. 
-
-  {{< output >}}
-    files: 
-        kubeconfig-sp: |
-           <FILE CONTENTS HERE> # Content from kubeconfig created by Spinnaker Tool
-   {{< /output >}}
-
 Congratulations! You are done with the Spinnaker configuration for all the Spinnaker services! Lets install Spinnaker now.

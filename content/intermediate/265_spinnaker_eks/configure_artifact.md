@@ -42,9 +42,9 @@ Spinnaker requires an external storage provider for persisting our Application s
 `S3_AWS_ACCESS_KEY_ID` and `S3_AWS_SECRET_ACCESS_KEY` are the AWS profile credentials for the user who has created the above S3 bucket.
 
 {{< output >}}
-export S3_BUCKET=<your_s3_bucket>
-export S3_AWS_ACCESS_KEY_ID=<your_access_key>
-export S3_AWS_SECRET_ACCESS_KEY=<your_secret_access_key>
+echo $S3_BUCKET
+echo $S3_AWS_ACCESS_KEY_ID
+echo $S3_AWS_SECRET_ACCESS_KEY
 {{< /output >}}
 
 
