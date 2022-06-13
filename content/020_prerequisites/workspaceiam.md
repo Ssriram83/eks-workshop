@@ -101,7 +101,7 @@ aws eks update-kubeconfig --region us-east-2 --name eksworkshop-eksctl
 Go to: Github > Settings > Developer Settings > Personal Access Tokens
 Oauth Scope Access: Repo and Workflow
 
-(Personal Access Tokens)[https://github.com/settings/tokens]
+[Personal Access Tokens](https://github.com/settings/tokens)
 
 ```
 export GITHUB_USER=Github_user_name
@@ -110,7 +110,7 @@ export GITHUB_TOKEN=<YOur-access-token>
 
 4. Create a AWS IAM user that has access to S3. 
 
-(Create IAM User)[https://us-east-1.console.aws.amazon.com/iam/home#/users$new?step=review&accessKey&userNames=spinnaker-user-test&permissionType=policies&policies=arn:aws:iam::aws:policy%2FAmazonS3FullAccess]
+[Create IAM User](https://us-east-1.console.aws.amazon.com/iam/home#/users$new?step=review&accessKey&userNames=spinnaker-user-test&permissionType=policies&policies=arn:aws:iam::aws:policy%2FAmazonS3FullAccess)
 
 
 Download the Access Key and Secret key and set it as environment variables. 
