@@ -6,7 +6,6 @@ frontend:
   phases:
     build:
       commands:
-        - env
         - hugo -v
   artifacts:
     baseDirectory: public
