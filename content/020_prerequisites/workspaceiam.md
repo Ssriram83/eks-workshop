@@ -84,17 +84,6 @@ eksctl completion bash >> ~/.bash_completion
 . /etc/profile.d/bash_completion.sh
 . ~/.bash_completion
 
-
-echo "Creating User for Spinnaker Start"
-aws iam create-user --user-name spinnaker-s3-user
-aws iam create-access-key --user-name spinnaker-s3-user
-aws iam attach-user-policy --user-name spinnaker-s3-user --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess
-apiResult=$(aws iam create-access-key --user-name spinnaker-s3-user)
-S3_AWS_SECRET_ACCESS_KEY=$(jq -r '.AccessKey.SecretAccessKey' <<<"$apiResult")
-S3_AWS_ACCESS_KEY_ID=$(jq -r '.AccessKey.AccessKeyId' <<<"$apiResult")
-echo "Creating User for Spinnaker End"
-
-
 for command in kubectl jq envsubst aws
   do
     which $command &>/dev/null && echo "OK: $command in path" || echo "$command NOT FOUND"
@@ -117,5 +106,17 @@ Oauth Scope Access: Repo and Workflow
 ```
 export GITHUB_USER=Github_user_name
 export GITHUB_TOKEN=<YOur-access-token>
+```
 
+4. Create a AWS IAM user that has access to S3. 
+
+(Create IAM User)[https://us-east-1.console.aws.amazon.com/iam/home#/users$new?step=review&accessKey&userNames=spinnaker-user-test&permissionType=policies&policies=arn:aws:iam::aws:policy%2FAmazonS3FullAccess]
+
+
+Download the Access Key and Secret key and set it as environment variables. 
+![Image](/images/IAM_USER_ACCESS-KEY.PNG)
+
+```
+export S3_AWS_SECRET_ACCESS_KEY=Github_user_name
+export GITHUB_TOKEN=<Your-access-token>
 ```

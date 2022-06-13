@@ -22,7 +22,7 @@ spec:
           rootFolder: front50
           region: $AWS_REGION
           accessKeyId: $S3_AWS_ACCESS_KEY_ID
-          secretAccessKey: $S3_AWS_SECRET_ACCESS_KEY
+          secretAccessKey: "$S3_AWS_SECRET_ACCESS_KEY"
       deploymentEnvironment:
         sidecars:
           spin-clouddriver:
