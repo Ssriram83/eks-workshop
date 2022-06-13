@@ -26,15 +26,6 @@ Spinnaker requires an external storage provider for persisting our Application s
 
 * **Create S3 Bucket first**
 
-  You can create S3 bucket either using Admin Console or using AWS CLI (Use one of the option from below)
-
-    * Using Admin Console
-
-	   Go to AWS Console >>> S3 and create the bucket as below
-
-  	![Spinnaker](/images/spinnnaker/s3bucket.png)
-  	![Spinnaker](/images/spinnnaker/s3bucketdetail.png)
-
     * Using AWS CLI
 
       ```
@@ -48,29 +39,14 @@ Spinnaker requires an external storage provider for persisting our Application s
 
 * **Set up environment variables**
 
-`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are the AWS profile credentials for the user who has created the above S3 bucket.
+`S3_AWS_ACCESS_KEY_ID` and `S3_AWS_SECRET_ACCESS_KEY` are the AWS profile credentials for the user who has created the above S3 bucket.
 
 {{< output >}}
 export S3_BUCKET=<your_s3_bucket>
-export AWS_ACCESS_KEY_ID=<your_access_key>
-export AWS_SECRET_ACCESS_KEY=<your_secret_access_key>
+export S3_AWS_ACCESS_KEY_ID=<your_access_key>
+export S3_AWS_SECRET_ACCESS_KEY=<your_secret_access_key>
 {{< /output >}}
 
-
-* **Configure persistentStorage**
-
-Open the `SpinnakerService` manifest located at `deploy/spinnaker/basic/spinnakerservice.yml`, then update the section `spec.spinnakerConfig.config` as below.
-
-{{< output >}}
-  persistentStorage:
-    persistentStoreType: s3
-    s3:
-      bucket: $S3_BUCKET
-      rootFolder: front50
-      region: $AWS_REGION
-      accessKeyId: $AWS_ACCESS_KEY_ID
-      secretAccessKey: $AWS_SECRET_ACCESS_KEY
-{{< /output >}}
 
 #### Configure ECR Artifact
 
@@ -126,56 +102,6 @@ Confirm if configmap is created correctly
 kubectl describe configmap token-refresh-config -n spinnaker
 ```
 
-* **Add a sidecar for token refresh**
-
-Open the `SpinnakerService` manifest located under `deploy/spinnaker/basic/spinnakerservice.yml`, then add the below snippet under `spec.spinnakerConfig.config`.
-
-{{< output >}}
-      deploymentEnvironment:
-        sidecars:
-          spin-clouddriver:
-          - name: token-refresh
-            dockerImage: quay.io/skuid/ecr-token-refresh:latest
-            mountPath: /etc/passwords
-            configMapVolumeMounts:
-            - configMapName: token-refresh-config
-              mountPath: /opt/config/ecr-token-refresh
- {{< /output >}}
-
-* **Define an ECR Registry**
-
-Open the `SpinnakerService` manifest located under `deploy/spinnaker/basic/spinnakerservice.yml`, then add the below section under `spec.spinnakerConfig`.
-
-{{< output >}}
-      profiles:
-        clouddriver:
-          dockerRegistry:
-            enabled: true
-            primaryAccount: my-ecr-registry
-            accounts:
-            - name: my-ecr-registry
-              address: https://$ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
-              username: AWS
-              passwordFile: /etc/passwords/my-ecr-registry.pass
-              trackDigests: true
-              repositories:
-              - $ECR_REPOSITORY
- {{< /output >}}
-
-#### Configure Igor
-
-[Igor](https://github.com/spinnaker/igor/#common-polling-architecture) is a is a wrapper API that provides a single point of integration with Continuous Integration (CI) and Source Control Management (SCM) services for Spinnaker. It is responsible for kicking-off jobs and reporting the state of running or completing jobs.
-
-[Clouddriver](https://github.com/spinnaker/clouddriver) can be configured to poll the ECR registries. When that is the case, igor can then create a poller that will list the registries indexed by clouddriver, check each one for new images and submit events to echo (hence allowing Docker triggers)
-
-Open the `SpinnakerService` manifest located under `deploy/spinnaker/basic/spinnakerservice.yml`, then add the below section to `spec.spinnakerConfig.profiles`.
-
-{{< output >}}
-      igor:
-        docker-registry:
-          enabled: true
- {{< /output >}}
-
 #### Add GitHub Repository
 
 * **Set up environment variables**
@@ -184,20 +110,3 @@ Open the `SpinnakerService` manifest located under `deploy/spinnaker/basic/spinn
 export GITHUB_USER=<your_github_username>
 export GITHUB_TOKEN=<your_github_accesstoken>
 {{< /output >}}
-
-* **Configure GitHub**
-
-To access a GitHub repo as a source of artifacts. If you actually want to use a file from the GitHub commit in your pipeline, you’ll need to configure GitHub as an artifact source in Spinnaker.
-
-Open the `SpinnakerService` manifest located under `deploy/spinnaker/basic/spinnakerservice.yml`, then add the below under section `spec.spinnakerConfig.config`.
-
-{{< output >}}
-      features:
-        artifacts: true
-      artifacts:
-        github:
-          enabled: true
-          accounts:
-          - name: $GITHUB_USER
-            token: $GITHUB_TOKEN  # GitHub's personal access token. This fields supports `encrypted` references to secrets.
- {{< /output >}}

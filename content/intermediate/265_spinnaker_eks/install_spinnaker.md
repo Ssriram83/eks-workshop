@@ -21,8 +21,8 @@ spec:
           bucket: $S3_BUCKET
           rootFolder: front50
           region: $AWS_REGION
-          accessKeyId: $AWS_ACCESS_KEY_ID
-          secretAccessKey: $AWS_SECRET_ACCESS_KEY
+          accessKeyId: $S3_AWS_ACCESS_KEY_ID
+          secretAccessKey: $S3_AWS_SECRET_ACCESS_KEY
       deploymentEnvironment:
         sidecars:
           spin-clouddriver:
@@ -101,8 +101,8 @@ Confirm if all the environment variables is set correctly
   echo $GITHUB_USER
   echo $GITHUB_TOKEN
   echo $S3_BUCKET
-  echo $AWS_ACCESS_KEY_ID
-  echo $AWS_SECRET_ACCESS_KEY
+  echo $S3_AWS_ACCESS_KEY_ID
+  echo $S3_AWS_SECRET_ACCESS_KEY
   echo $ECR_REPOSITORY
   ```
 
